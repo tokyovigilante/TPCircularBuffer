@@ -223,26 +223,6 @@ static __inline__ __attribute__((always_inline)) bool TPCircularBufferProduceByt
     return true;
 }
 
-/*!
- * Deprecated method
- */
-static __inline__ __attribute__((always_inline)) __deprecated_msg("use TPCircularBufferSetAtomic(false) and TPCircularBufferConsume instead")
-void TPCircularBufferConsumeNoBarrier(TPCircularBuffer *buffer, uint32_t amount) {
-    buffer->tail = (buffer->tail + amount) % buffer->length;
-    buffer->fillCount -= amount;
-    assert(buffer->fillCount >= 0);
-}
-
-/*!
- * Deprecated method
- */
-static __inline__ __attribute__((always_inline)) __deprecated_msg("use TPCircularBufferSetAtomic(false) and TPCircularBufferProduce instead")
-void TPCircularBufferProduceNoBarrier(TPCircularBuffer *buffer, uint32_t amount) {
-    buffer->head = (buffer->head + amount) % buffer->length;
-    buffer->fillCount += amount;
-    assert(buffer->fillCount <= buffer->length);
-}
-
 #ifdef __cplusplus
 }
 #endif
