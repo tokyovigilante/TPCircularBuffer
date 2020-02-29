@@ -1,3 +1,10 @@
+//  This is an altered source version of TPCircularBuffer available at:
+//
+//  https://github.com/tokyovigilante/TPCircularBuffer
+//
+//  The original version is available and distributed as follows:
+//
+//---------------------------------------------------------------------------
 //
 //  TPCircularBuffer.c
 //  Circular/Ring buffer implementation
@@ -54,7 +61,7 @@ bool _TPCircularBufferInit(TPCircularBuffer *buffer, uint32_t length, size_t str
     int fd = mkstemp(name);
     if ( fd < 0 ) {
         return false;
-    } 
+    }
     unlink(name);
 
     // Grow the file, to allow mmap, but don't actually allocate space
@@ -78,7 +85,7 @@ bool _TPCircularBufferInit(TPCircularBuffer *buffer, uint32_t length, size_t str
     // Now replace the second half of the allocation with a virtual copy of the first half
     void* virtualAddress = mmap(bufferAddress + buffer->length, buffer->length,
                                 PROT_READ|PROT_WRITE, MAP_SHARED|MAP_FIXED, fd, 0);
-        
+
     // Cleanup, as we don't need the descriptor anymore
     close(fd);
 
