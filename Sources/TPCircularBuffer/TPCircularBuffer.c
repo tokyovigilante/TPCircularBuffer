@@ -34,7 +34,7 @@
 //  3. This notice may not be removed or altered from any source distribution.
 //
 
-#include "TPCircularBuffer.h"
+#include "include/TPCircularBuffer.h"
 #include <sys/mman.h>
 #include <stdlib.h>
 #include <stdio.h>
