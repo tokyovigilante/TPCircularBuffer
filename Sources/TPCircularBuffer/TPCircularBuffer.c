@@ -39,10 +39,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/syscall.h>
 
 static inline int round_page(int length) {
     int pagesize = getpagesize();
     return length + pagesize - 1 - (length - 1) % pagesize;
+}
+
+int memfd_create (const char *name, unsigned int flags) {
+    return syscall(__NR_memfd_create, name, flags);
 }
 
 bool _TPCircularBufferInit(TPCircularBuffer *buffer, uint32_t length, size_t structSize) {
@@ -57,12 +62,10 @@ bool _TPCircularBufferInit(TPCircularBuffer *buffer, uint32_t length, size_t str
     buffer->length = (int32_t)round_page(length);    // We need whole page sizes
 
     // Create a temporary file to identify the memory block, that we immediatly unlink
-    char name[] = "/tmp/ringXXXXXX";
-    int fd = mkstemp(name);
+    int fd = memfd_create("queue_buffer", 0);
     if ( fd < 0 ) {
         return false;
     }
-    unlink(name);
 
     // Grow the file, to allow mmap, but don't actually allocate space
     if (ftruncate(fd, buffer->length*2) < 0) {
