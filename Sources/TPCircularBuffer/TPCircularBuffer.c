@@ -84,6 +84,7 @@ bool _TPCircularBufferInit(TPCircularBuffer *buffer, uint32_t length, size_t str
     buffer->buffer = bufferAddress;
     buffer->fillCount = 0;
     buffer->head = buffer->tail = 0;
+    buffer->atomic = true;
 
     // Now replace the second half of the allocation with a virtual copy of the first half
     void* virtualAddress = mmap(bufferAddress + buffer->length, buffer->length,
